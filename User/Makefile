@@ -174,7 +174,7 @@ ifneq ($(STANDALONE),1)
 	#
 	# OcCryptoLib targets.
 	#
-	OBJS    += RsaDigitalSign.o BigNumMontgomery.o BigNumPrimitives.o BigNumWordMul64.o Sha2.o SecureMem.o Sha512AvxDummy.o
+	OBJS    += RsaDigitalSign.o BigNumMontgomery.o BigNumPrimitives.o BigNumWordMul64.o Sha2.o SecureMem.o Sha512AccelDummy.o
 	#
 	# OcMachoLib targets.
 	#
@@ -223,7 +223,7 @@ ifneq ($(STANDALONE),1)
 				$(OC_USER)/Library/OcXmlLib:$\
 				$(OC_USER)/Library/OcStringLib:$\
 				$(OC_USER)/Library/OcCryptoLib:$\
-				$(OC_USER)/Library/OcCryptoLib/$(UDK_ARCH):$\
+				$(OC_USER)/Library/OcCryptoLib/Cpu32:$\
 				$(OC_USER)/Library/OcMachoLib:$\
 				$(OC_USER)/Library/OcAppleKeysLib:$\
 				$(OC_USER)/Library/OcCpuLib:$\
@@ -268,26 +268,19 @@ sydr-fuzz: $(PROJECT).sydr$(SUFFIX) $(PROJECT)$(SUFFIX) FORCE
 	@$(MKDIR) $(FUZZ_DIR)
 	@rm -rf sydr-fuzz-out
 	@cat <<- EOF > sydr-fuzz.toml
-	 	[sydr]
+		[sydr]
 		args = "--solving-timeout 60 -s 900 -j $(FUZZ_JOBS)"
 		target = "$(PROJECT).sydr$(SUFFIX) @@"
-		jobs = 1
+		jobs = $(FUZZ_JOBS)
 
 		[libfuzzer]
 		path = "$(PROJECT)$(SUFFIX)"
 		args = "-jobs=$(FUZZ_JOBS) -workers=$(FUZZ_JOBS) -rss_limit_mb=$(FUZZ_MEM) $(FUZZ_DIR)"
 	EOF
-	UBSAN_OPTIONS='halt_on_error=1' sydr-fuzz -l debug run -f
+	UBSAN_OPTIONS='halt_on_error=1' sydr-fuzz run -f
 
 sydr-fuzz-security: $(PROJECT).sydr$(SUFFIX) $(PROJECT)$(SUFFIX) FORCE
-	@cat <<- EOF > sydr-fuzz.toml
-	 	[sydr]
-		args = "--security --no-invert"
-		target = "$(PROJECT).sydr$(SUFFIX) @@"
-		corpus = "sydr-fuzz-out/corpus"
-		jobs = $(FUZZ_JOBS)
-	EOF
-	sydr-fuzz -l debug security
+	sydr-fuzz security
 
 sydr-fuzz-import: $(PROJECT).sydr$(SUFFIX) $(PROJECT)$(SUFFIX) FORCE
 	@$(MKDIR) sydr-fuzz-out/corpus

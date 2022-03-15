@@ -141,6 +141,7 @@
   UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
   UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
   UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
+  VariablePolicyHelperLib|MdeModulePkg/Library/VariablePolicyHelperLib/VariablePolicyHelperLib.inf
   ResetSystemLib|OpenCorePkg/Library/OcResetSystemLib/OcResetSystemLib.inf
 
   !include NetworkPkg/NetworkLibs.dsc.inc
@@ -222,7 +223,7 @@
   OpenCorePkg/Library/OcCpuLib/OcCpuLib.inf
   OpenCorePkg/Library/OcCryptoLib/OcCryptoLib.inf
   OpenCorePkg/Library/OcDataHubLib/OcDataHubLib.inf
-  OpenCorePkg/Library/OcDebugSerialLib/OcDebugSerialLib.inf
+  OpenCorePkg/Library/OcDebugLibSerial/OcDebugLibSerial.inf
   OpenCorePkg/Library/OcDebugLibProtocol/OcDebugLibProtocol.inf
   OpenCorePkg/Library/OcDebugLibNull/OcDebugLibNull.inf
   OpenCorePkg/Library/OcDeviceMiscLib/OcDeviceMiscLib.inf
